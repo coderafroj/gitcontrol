@@ -39,9 +39,7 @@ const Sidebar = () => {
     <aside className="sidebar glass">
       <div className="sidebar-header">
         <div className="logo-container">
-          <div className="logo-icon">
-            <GithubIcon size={24} />
-          </div>
+          <img src="/logo.png" alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '10px' }} />
           <span className="logo-text gradient-text">GitControl</span>
         </div>
       </div>
