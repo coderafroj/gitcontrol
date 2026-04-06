@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGitHub } from '../context/GitHubContext';
-import { Github, Key, ArrowRight, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Key, ArrowRight, ExternalLink, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BackgroundEffect from './BackgroundEffect';
 
