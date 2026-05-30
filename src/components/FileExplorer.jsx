@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useGitHub } from '../context/GitHubContext';
+import Fuse from 'fuse.js';
 import { 
   Folder, 
   File, 
@@ -22,9 +23,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Uploader from './Uploader';
 import FilePreview from './FilePreview';
 import { FileItemSkeleton, GridItemSkeleton } from './Skeleton';
+import AuthImage from './AuthImage';
 
 const FileExplorer = () => {
-  const { currentRepo, currentPath, contents, fetchContents, createFolder, uploadFile, loading, error } = useGitHub();
+  const { currentRepo, currentPath, contents, fetchContents, createFolder, uploadFile, loading, error, token } = useGitHub();
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [search, setSearch] = useState('');
@@ -95,9 +97,12 @@ const FileExplorer = () => {
     return ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(ext);
   };
 
-  const filteredContents = contents?.filter(item => 
-    item.name.toLowerCase().includes(debouncedSearch.toLowerCase())
-  );
+  const filteredContents = useMemo(() => {
+    if (!contents) return [];
+    if (!debouncedSearch) return contents;
+    const fuse = new Fuse(contents, { keys: ['name'], threshold: 0.3 });
+    return fuse.search(debouncedSearch).map(result => result.item);
+  }, [contents, debouncedSearch]);
 
   return (
     <div className="explorer-container" style={{ width: '100%', height: '100%' }}>
@@ -293,7 +298,7 @@ const FileExplorer = () => {
                   <div className="grid-content">
                     {item.type === 'file' && isImage(item.name) ? (
                       <div className="image-thumb">
-                        <img src={item.download_url} alt="" loading="lazy" />
+                        <AuthImage file={item} token={token} />
                       </div>
                     ) : (
                       <div className="icon-wrapper">

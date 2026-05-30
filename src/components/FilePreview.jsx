@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useGitHub } from '../context/GitHubContext';
 import { X, Download, Maximize2, FileText, ImageIcon, FileCode } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import AuthImage from './AuthImage';
 
 const FilePreview = ({ file, onClose }) => {
   const { currentRepo, token } = useGitHub();
@@ -48,9 +49,9 @@ const FilePreview = ({ file, onClose }) => {
       case 'image':
         return (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background: '#000' }}>
-            <img 
-              src={file.download_url} 
-              alt={file.name} 
+            <AuthImage 
+              file={file}
+              token={token}
               style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} 
             />
           </div>
